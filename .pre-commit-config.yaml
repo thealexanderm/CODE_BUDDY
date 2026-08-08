@@ -8,11 +8,8 @@ repos:
     -   id: end-of-file-fixer
     -   id: check-yaml
     -   id: check-added-large-files
-    -   id: black
-        name: black
-        description: "Black: The uncompromising Python code formatter"
-        entry: black
-        language: python
-        minimum_pre_commit_version: 2.9.2
-        require_serial: true
-        types_or: [python, pyi]
+- repo: https://github.com/psf/black-pre-commit-mirror
+    rev: 26.5.1
+    hooks:
+      - id: black
+        language_version: python3.11
