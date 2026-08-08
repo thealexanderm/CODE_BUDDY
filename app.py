@@ -205,7 +205,7 @@ def main() -> None:
         logo_page="Home",
         urls={"About": "https://github.com/Arcerite/CAM_CODING_PROFILER"},
         styles=get_navbar_styles(),
-        options=get_navbar_options(),
+        options=get_navbar_options(),  # type: ignore
         adjust=False,
     )
 
