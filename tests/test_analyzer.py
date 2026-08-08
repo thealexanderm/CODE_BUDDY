@@ -1,5 +1,3 @@
-"""Unit tests validating unified analytical models, guardrails, and structural parsing mechanisms."""
-
 from unittest.mock import patch
 
 import pytest
@@ -9,8 +7,6 @@ from analyzer import analyze_and_process_code, create_client, validate_analysis_
 
 
 def test_validate_analysis_response_success():
-    """Veryify that a correct json returns true."""
-    # An example of a valid json response
     valid_data = {
         "is_valid_code": True,
         "language": "python",
@@ -25,23 +21,15 @@ def test_validate_analysis_response_success():
         "refactored_code": "def typed_function() -> None:\n    pass",
         "readme_content": "# Readme Markdown",
     }
-    # When we test this json response in our analysis it should be true
     assert validate_analysis_response(valid_data) is True
 
 
 def test_validate_analysis_response_missing_key():
-    """Verify that missing required keys sets validation to False."""
-    # Trigger via incorrect dictionary keys
     invalid_data = {"big_o": {"time": "O(n)", "space": "O(1)", "explanation": "..."}}
-    assert (
-        validate_analysis_response(invalid_data) is False
-    )  # Should return false due to inccorect key
+    assert validate_analysis_response(invalid_data) is False
 
-    # Trigger via non-dictionary type
-    assert validate_analysis_response(None) is False  # no input should return false
-    assert (
-        validate_analysis_response("not a dictionary") is False
-    )  # not a dictonary should return false
+    assert validate_analysis_response(None) is False
+    assert validate_analysis_response("not a dictionary") is False
 
 
 def test_validate_analysis_response_invalid_types():
@@ -65,7 +53,7 @@ def test_validate_analysis_response_invalid_types():
     # Systematically corrupt every individual text field
     for key in ["language", "extension", "refactored_code", "readme_content"]:
         bad_payload = base_payload.copy()
-        bad_payload[key] = 123  # Int violates expected string constraint
+        bad_payload[key] = 123
         assert validate_analysis_response(bad_payload) is False
 
     # Test invalid type for big_o

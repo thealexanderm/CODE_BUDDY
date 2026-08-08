@@ -1,5 +1,3 @@
-"""Integration tests evaluating application view renderings, reactive elements, and lifecycle routines."""
-
 import runpy
 from unittest.mock import MagicMock, patch
 
@@ -9,14 +7,12 @@ import app
 
 
 def test_app_renders_properly():
-    """Verify that structural panels and baseline grid interfaces launch correctly."""
     at = AppTest.from_file("app.py").run()
     assert not at.exception
     assert at.subheader[0].value == "Source Code"
 
 
 def test_invalid_syntax_error_handling():
-    """Verify that text blocks violating security parameters abort execution flows early."""
     with patch("app.analyze") as mock_analyze:
         mock_analyze.return_value = {
             "is_valid_code": False,
@@ -41,7 +37,6 @@ def test_invalid_syntax_error_handling():
 
 
 def test_analyze_exception_handling():
-    """Verify backend failure exceptions translate cleanly into on-screen alerts."""
     with patch("analyzer.analyze_and_process_code") as mock_analyze:
         mock_analyze.side_effect = RuntimeError("Groq API Timeout or Connection Error")
 
@@ -53,7 +48,6 @@ def test_analyze_exception_handling():
 
 
 def test_empty_input_guardrail():
-    """Verify that executing metrics requests over purely blank records returns warnings immediately."""
     at = AppTest.from_file("app.py").run()
     at.text_area[0].input("    ").run()
     at.button[0].click().run()
@@ -62,7 +56,6 @@ def test_empty_input_guardrail():
 
 
 def test_ui_renders_flaws_and_suggestions():
-    """Force UI to expand layout components and fully render lists."""
     with patch("analyzer.analyze_and_process_code") as mock_analyze:
         mock_analyze.return_value = {
             "is_valid_code": True,
@@ -82,7 +75,6 @@ def test_ui_renders_flaws_and_suggestions():
 
 
 def test_ui_renders_empty_flaws_and_suggestions():
-    """Force UI to cover paths where flaws and suggestions are entirely empty."""
     with patch("analyzer.analyze_and_process_code") as mock_analyze:
         mock_analyze.return_value = {
             "is_valid_code": True,
@@ -102,7 +94,6 @@ def test_ui_renders_empty_flaws_and_suggestions():
 
 
 def test_direct_render_suggestions_loop_coverage():
-    """Directly invoke internal component function to enforce loop statement coverage (Line 129)."""
     with patch("app.st.expander"):
         app._render_suggestions_section(
             {"suggestions": ["Suggestion A", "Suggestion B"]}
@@ -110,7 +101,6 @@ def test_direct_render_suggestions_loop_coverage():
 
 
 def test_main_block_execution():
-    """Force execution of the standard __main__ idiomatic script block cleanly (Line 260)."""
     with patch("app._set_page_config"), patch("app._hide_streamlit_buttons"), patch(
         "app.st_navbar"
     ), patch("app.load_dotenv"), patch("app._initialize_session_state"), patch(
