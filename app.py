@@ -1,5 +1,3 @@
-"""Setup layout views and interactions for the Streamlit Website."""
-
 from __future__ import annotations
 
 from typing import Any, Dict, Optional
@@ -13,7 +11,6 @@ from utils import MAX_CODE_LENGTH, get_navbar_options, get_navbar_styles
 
 
 def _set_page_config() -> None:
-    """Sets the main configuration of the page (website name, icon, etc)."""
     st.set_page_config(
         page_title="Code Buddy",
         page_icon="Images/smile_icon.png",
@@ -23,7 +20,6 @@ def _set_page_config() -> None:
 
 
 def _hide_streamlit_buttons() -> None:
-    """hides basic buttons."""
     st.markdown(
         """
     .stAppDeployButton {
@@ -62,19 +58,10 @@ def _initialize_session_state() -> None:
 
 
 def _render_complexity_section(analysis: Optional[Dict[str, Any]]) -> None:
-    """Render Big-O components.
-
-    Args:
-        analysis (Optional[Dict[str, Any]]): Decoded LLM metrics map, if available.
-    """
-    with st.expander(
-        "**Complexity**", expanded=True
-    ):  # If the complexity widget is open
+    with st.expander("**Complexity**", expanded=True):
         if analysis is None:
-            st.write(
-                "Please run the code analysis to find the complexity."
-            )  # if there is no result tell them to run the analyzer
-        else:  # if there is code, display the resutlts
+            st.write("Please run the code analysis to find the complexity.")
+        else:
             big_o = analysis.get("big_o", {})
             st.write(
                 f"Time Complexity: {big_o.get('time', 'Unknown')}  \n",
@@ -84,17 +71,8 @@ def _render_complexity_section(analysis: Optional[Dict[str, Any]]) -> None:
 
 
 def _render_flaws_section(analysis: Optional[Dict[str, Any]]) -> None:
-    """Render flaws found within the code.
-
-    Args:
-        analysis (Optional[Dict[str, Any]]): Decoded LLM metrics map, if available.
-    """
-    with st.expander(
-        "**Identified Flaws**", expanded=False
-    ):  # if the flaw widget is open
-        if (
-            analysis is None
-        ):  # if they did not analyze code tell them to run the program
+    with st.expander("**Identified Flaws**", expanded=False):
+        if analysis is None:
             st.write("Please run the code analysis to find flaws.")
         else:  # otherwise show the flaws
             flaws = analysis.get("flaws", [])
@@ -106,26 +84,15 @@ def _render_flaws_section(analysis: Optional[Dict[str, Any]]) -> None:
 
 
 def _render_suggestions_section(analysis: Optional[Dict[str, Any]]) -> None:
-    """Render the suggestions generated.
-
-    Args:
-        analysis (Optional[Dict[str, Any]]): Decoded LLM metrics map, if available.
-    """
-    with st.expander(
-        "**Suggestions**", expanded=False
-    ):  # if the suggestions widget is open
-        if (
-            analysis is None
-        ):  # if there is no analysis to show tell the user to run the program
+    with st.expander("**Suggestions**", expanded=False):
+        if analysis is None:
             st.write("Please run the code analysis to find suggestions.")
-        else:  # if there is analysis to show
+        else:
             suggestions = analysis.get("suggestions", [])
-            if (
-                suggestions
-            ):  # if there are any suggestions generated show them one by one
+            if suggestions:
                 for suggestion in suggestions:
                     st.write(f"- {suggestion}")
-            else:  # otherwise if there are no suggestions but the program was run tell the user no suggestions generated
+            else:
                 st.success("No suggestions generated.")
 
 
@@ -138,31 +105,18 @@ def _render_refactored_code_section(
         refactored_code (Optional[str]): Processed optimization logic string.
         language (str): Target text syntax type parsing target used by code blocks.
     """
-    with st.expander(
-        "**Refactored Code**", expanded=False
-    ):  # if the refactored code widget is open
-        if (
-            refactored_code is None
-        ):  # if there is no refactored code to show as the user to run the analysis
+    with st.expander("**Refactored Code**", expanded=False):
+        if refactored_code is None:
             st.write("Please run the code analysis to get refactored code.")
-        else:  # otherwise show the code in the language that was detected
+        else:
             st.code(refactored_code, language=language)
 
 
 def _render_readme_section(readme_content: Optional[str]) -> None:
-    """Render generated readme.
-
-    Args:
-        readme_content (Optional[str]): Formatted markdown documentation block.
-    """
-    with st.expander(
-        "**Generated README**", expanded=False
-    ):  # if the readme widget is open
-        if (
-            readme_content is None
-        ):  # if there is no readme to show ask the user to run the code analysis to generate a readme
+    with st.expander("**Generated README**", expanded=False):
+        if readme_content is None:
             st.write("Please run the code analysis to get the generated README.")
-        else:  # otherwise show the readme that was generated
+        else:
             st.markdown(readme_content)
 
 
@@ -171,21 +125,12 @@ def _render_download_buttons(
     readme_content: Optional[str],
     extension: str = ".py",
 ) -> None:
-    """Render the download buttons underneath the columns.
-
-    Args:
-        refactored_code (Optional[str]): Source asset string bound for download.
-        readme_content (Optional[str]): Documentation string asset bound for download.
-        extension (str): Target filesystem text type suffix.
-    """
     if (readme_content is not None) and (
         refactored_code is not None
     ):  # if both the readme and the refactored code exsists
         st.markdown("---")
         d_col1, d_col2 = st.columns(2)
-        with (
-            d_col1
-        ):  # on the left have a collumn with a button to download refactored code
+        with d_col1:
             st.download_button(
                 label="💾 Download Code",
                 data=refactored_code,
@@ -193,7 +138,7 @@ def _render_download_buttons(
                 mime="text/plain",
                 use_container_width=True,
             )
-        with d_col2:  # on the right, have a collumn with a button to download readme.md
+        with d_col2:
             st.download_button(
                 label="📖 Download README",
                 data=readme_content,
@@ -208,19 +153,10 @@ def render_analysis_ui(
     refactored_code: Optional[str] = None,
     readme_content: Optional[str] = None,
 ) -> None:
-    """render the full ui
-
-    Args:
-        analysis (Optional[Dict[str, Any]]): Decoded structural analytics map.
-        refactored_code (Optional[str]): Complete logic optimization code string.
-        readme_content (Optional[str]): Renderable markdown project summary text block.
-    """
-    if (
-        analysis
-    ):  # if the code was analyzed succesfully, try and get the language and extension. defaults are python and .py if it fails
+    if analysis:
         language = analysis.get("language", "python")
         extension = analysis.get("extension", ".py")
-    else:  # if the code was not analyzed set the language and extension to python and .py
+    else:
         language = "python"
         extension = ".py"
 
@@ -233,23 +169,15 @@ def render_analysis_ui(
 
 
 def analyze(user_input: str) -> None:
-    """run the analysis
-    Args:
-        user_input (str): Target text block pulled from active browser text area frame.
-    """
-    if not user_input.strip():  # if the user inputs a blank string
+    if not user_input.strip():
         st.warning("Please provide valid code input before running diagnostics.")
         return
 
-    try:  # attempt to run the analyzer
-        with st.spinner(
-            "Analyzing, refactoring, and documenting code..."
-        ):  # "loading" analyzis
+    try:
+        with st.spinner("Analyzing, refactoring, and documenting code..."):
             combined_results = analyze_and_process_code(user_input)  # run the analyzer
 
-            if not combined_results.get(
-                "is_valid_code", True
-            ):  # if the ai returns that the provided input was not valid code or if there was an error, abort
+            if not combined_results.get("is_valid_code", True):
                 st.session_state.analysis_results = {
                     "analysis": combined_results,
                     "refactored_code": "Error: Input does not appear to be valid source code. Refactoring aborted.",  # noqa: E501
@@ -263,13 +191,11 @@ def analyze(user_input: str) -> None:
                 "readme_content": combined_results.get("readme_content", ""),
             }
 
-    except Exception as error:  # in the event of any errors report an error
+    except Exception as error:
         st.error(f"Analysis failed:\n{error}")
 
 
 def main() -> None:
-    """Build structure of the website."""
-    # sets up the bones of the website
     _set_page_config()
     _hide_streamlit_buttons()
     st_navbar(
@@ -286,8 +212,7 @@ def main() -> None:
     load_dotenv()
     _initialize_session_state()
 
-    col1, col2 = st.columns(2)  # seperate the website into two sections
-    # in the left section have the source code portion
+    col1, col2 = st.columns(2)
     with col1:
         st.subheader("Source Code")
         user_input = st.text_area(
@@ -303,7 +228,6 @@ def main() -> None:
             type="primary",
             use_container_width=True,
         )
-    # in the right section have all the widgets
     with col2:
         st.markdown(
             "<h3 style='text-align: center;'> Results</h3>",
