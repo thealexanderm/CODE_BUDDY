@@ -12,17 +12,17 @@ Software development takes time and effort to do well, but **Code Buddy** aims t
 
 Large Language Models have changed the way that software is developed, but trying to "vibe code" can easily turn into fighting with the model rather than creating quality software. Even if you code something functional with an LLM, it may be riddled with bugs and security risks. **Code Buddy** aims to use AI to build code faster and better without the headaches.
 
-**Code Buddy** is an intelligent source code analysis website built with Streamlit and powered by Groq (Llama 3.3). Once the user uploads their code, Groq will analyze it for time and space complexity, performance bottlenecks, security concerns, and style convention violations. Our website will return the report with detailed explanations, a README file, and a new version of the code with corrected errors and improved readability. The user will be able to export the refactored code and documentation instantly.
+**Code Buddy** is an intelligent source code analysis website built with Streamlit and powered by Groq's Compound. Groq's Compound system integrates OpenAI's GPT-OSS 120B and Llama 4 models. Once the user uploads their code, Groq will analyze it for time and space complexity, performance bottlenecks, security concerns, and style convention violations. Our website will return the report with detailed explanations, a README file, and a new version of the code with corrected errors and improved readability. The user will be able to export the refactored code and documentation instantly.
 
 ## 3. Architectural Design
 
-The **Code Buddy** website is built entirely with Python. The frontend uses the Streamlit library. The backend implements the LLM prompts, API integration with GroqCloud, and JSON response validation. The website takes in the user's pasted code to give to the Groq Llama 3.3 model to analyze. The Groq Llama 3.3 model returns a detailed report with explanations, a README file, and a new version of the code with corrected errors and improved readability. The user will be able to export the refactored code and documentation instantly.
+The **Code Buddy** website is built entirely with Python. The frontend uses the Streamlit library. The backend implements the LLM prompts, API integration with GroqCloud, and JSON response validation. The website takes in the user's pasted code to give to the Groq's Compound model to analyze. The Groq's Compound model returns a detailed report with explanations, a README file, and a new version of the code with corrected errors and improved readability. The user will be able to export the refactored code and documentation instantly.
 
 ### 3.1 Class Diagram
 
 <p align="center">
     <img src="UML/class_diagram.png" alt="Use Case Diagram" />
-    Figure 1: Class Diagram
+    Figure 1: Class Diagram (Outdated)
 </p>
 
 ### 3.2 Use Case Diagram
