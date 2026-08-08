@@ -26,7 +26,7 @@ jobs:
           pip install pytest flake8 isort mypy
           pip install black==24.4.0
           pip install -r requirements.txt
-      
+
       - name: markdownlint-cli2-action
         uses: DavidAnson/markdownlint-cli2-action@main
 
@@ -40,7 +40,7 @@ jobs:
         run: |
           # 1. Added --max-line-length=88 so syntax/undefined checks also respect 88 characters
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --max-line-length=88
-          
+
           # 2. Changed --extend-ignore to explicitly ignore E501 (Line too long) entirely!
           flake8 . --count --max-complexity=10 --max-line-length=88 --extend-ignore=E203,W503,E501 --statistics
 
