@@ -5,3 +5,4 @@ flake8
 mypy
 pytest
 streamlit-navigation-bar
+pre-commit
