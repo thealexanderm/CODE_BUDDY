@@ -8,7 +8,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from groq import Groq
 
-MODEL_NAME = "groq/compound"
+MODEL_NAME = "llama-3.3-70b-versatile"
 MAX_RETRIES = 3
 
 
