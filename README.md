@@ -41,7 +41,7 @@ The **Code Buddy** website is built entirely with Python. The frontend uses the 
 
 ## 4. User Guide/Implementation
 
-Users can access the application from any device with a web browser and internet connection. However, the application is designed for a desktop environment, so it is recommended to use "desktop mode" if using a mobile browser. If the application has not been accessed recently, it will need to "wake up"; this is normal and should only take around 15 seconds. The application can be accessed at the site: [c0de-buddy.streamlit.app](https://c0de-buddy.streamlit.app/).
+Users can access the application from any device with a web browser and internet connection. However, the application is designed for a desktop environment, so it is recommended to use "desktop mode" if using a mobile browser. If the application has not been accessed recently, it will need to "wake up"; this is normal and should only take around 15 seconds. The application can be accessed at the site: [code-buddy-mulderfork.streamlit.app](https://code-buddy-mulderfork.streamlit.app/).
 
 <p align="center">
     <img src="Images/sleeping.png" alt="Sleeping site" />
