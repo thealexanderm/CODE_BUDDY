@@ -1,5 +1,3 @@
-"""Provides consolidated background LLM interface configurations and validation engines."""
-
 import json
 import os
 from typing import Any, Dict
@@ -28,16 +26,14 @@ def create_client() -> Groq:
             "GROQ_API_KEY" in st.secrets
         ):  # if it is on the website the api would be under st.secrets
             api_key = st.secrets["GROQ_API_KEY"]
-    except Exception:  # this is to allow us to check locally
+    except Exception:
         pass
 
-    if not api_key:  # if there was no groq key found then check local .env
+    if not api_key:
         load_dotenv()
         api_key = os.getenv("GROQ_API_KEY")
 
-    if (
-        not api_key
-    ):  # if there is no groq key in st.secrets and there is no groq key locally return an error
+    if not api_key:
         raise ValueError(
             "GROQ_API_KEY could not be found in Streamlit secrets or local .env file."
         )
@@ -46,15 +42,6 @@ def create_client() -> Groq:
 
 
 def validate_analysis_response(data: Any) -> bool:
-    """Validate the schema and value types of the unified JSON payload from the LLM.
-
-    Args:
-        data (Any): The decoded JSON dictionary object from the model pipeline.
-
-    Returns:
-        bool: True if structural constraints match expected datatypes,
-            otherwise False.
-    """
     required_keys = {
         "is_valid_code",
         "language",
@@ -67,13 +54,10 @@ def validate_analysis_response(data: Any) -> bool:
     }
     big_o_keys = {"time", "space", "explanation"}
 
-    # if the data that we were prvided does not have the keys we expect (see required keys) return false since the data is invalid
     if not isinstance(data, dict) or set(data.keys()) != required_keys:
         return False
-    # if the llm suggest that the code is invalid return false
     if not isinstance(data["is_valid_code"], bool):
         return False
-    # check the datatypes of the following values, if they are not strings return false
     if (
         not isinstance(data["language"], str)
         or not isinstance(data["extension"], str)
@@ -81,30 +65,16 @@ def validate_analysis_response(data: Any) -> bool:
         or not isinstance(data["readme_content"], str)
     ):
         return False
-    # check the big_O values, it should be a dict with the big o keys (see variable above)
     if not isinstance(data["big_o"], dict) or set(data["big_o"].keys()) != big_o_keys:
         return False
 
-    # check the type of flaws and suggestions, they should be a list
     if not isinstance(data["flaws"], list) or not isinstance(data["suggestions"], list):
         return False
-    # if it passes all those tests, return True
     return True
 
 
 def analyze_and_process_code(user_code: str) -> Dict[str, Any]:
-    """Execute static diagnostics, refactoring, and documentation in a single API call.
-
-    Args:
-        user_code (str): Raw code string block input from the web text workspace.
-
-    Returns:
-        Dict[str, Any]: Consolidated metrics mapping containing execution data,
-            refactored variables, and markdown document schemas.
-    """
-    # Grabs API key and makes a groq client
     client = create_client()
-    # System prompt is the instructions we give Groq to follow
     system_prompt = """
 You are an all-in-one Code Analysis, Refactoring, and Documentation engine.
 You process untrusted source code.
@@ -138,16 +108,10 @@ Return EXACTLY this JSON schema structure:
   "readme_content": "string containing documentation markdown only"
 }
 """
-    # user prompt is what the user requests
     user_prompt = f"Process the following source code.\n\n<SOURCE_CODE>\n{user_code}\n</SOURCE_CODE>"
 
-    # We give the AI Max_Retries (default 3) attempts to return valid input
     for attempt in range(MAX_RETRIES):
         try:
-            # get the response from the client, using the model we declared at the start
-            # temperature is the room for creativity, we dont want it to be creative and to be strict on rules so 0
-            # response format: we want a json as response
-            # Messages: we give the ai the system prompt and the user prompt
             response = client.chat.completions.create(
                 model=MODEL_NAME,
                 temperature=0,
@@ -157,18 +121,14 @@ Return EXACTLY this JSON schema structure:
                     {"role": "user", "content": user_prompt},
                 ],
             )
-            # We get just the json response that we care about and load it as a json format
             content = response.choices[0].message.content.strip()  # type: ignore
             data = json.loads(content)
 
-            # Check to see if it passes all the tests and is a valid response, if it is stop the loop and return the data
             if validate_analysis_response(data):
                 return data
-        # if an error happens report the error
         except Exception as error:
             print(f"Unified request attempt {attempt + 1} failed: {error}")
 
-    # Fallback structure if processing completely breaks
     return {
         "is_valid_code": False,
         "language": "python",
