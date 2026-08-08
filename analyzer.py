@@ -8,7 +8,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from groq import Groq
 
-MODEL_NAME = "openai/gpt-oss-120b"
+MODEL_NAME = "groq/compound"
 MAX_RETRIES = 3
 
 
