@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import os
+# import os
 from typing import Any, Dict, Optional
 
 import streamlit as st
@@ -10,15 +10,15 @@ from streamlit_navigation_bar import st_navbar
 from analyzer import analyze_and_process_code
 from utils import MAX_CODE_LENGTH, get_navbar_options, get_navbar_styles
 
-IS_TEST = os.getenv("STREAMLIT_TESTING") == "1"
+# IS_TEST = os.getenv("STREAMLIT_TESTING") == "1"
 
 
 def _set_page_config() -> None:
-    if IS_TEST:
-        icon = None
-    else:
-        icon = "Images/smile_icon.png"
-
+    # if IS_TEST:
+    #     icon = None
+    # else:
+    #     icon = "Images/smile_icon.png"
+    icon = "Images/smile_icon.png"
     st.set_page_config(
         page_title="Code Buddy",
         page_icon=icon,
@@ -206,17 +206,28 @@ def analyze(user_input: str) -> None:
 def main() -> None:
     _set_page_config()
     _hide_streamlit_buttons()
-    if not IS_TEST:
-        st_navbar(
-            ["About"],
-            "Home",
-            logo_path="Images/logo-cascadia.svg",
-            logo_page="Home",
-            urls={"About": "https://github.com/Arcerite/CAM_CODING_PROFILER"},
-            styles=get_navbar_styles(),
-            options=get_navbar_options(),  # type: ignore
-            adjust=False,
-        )
+    # if not IS_TEST:
+    #     st_navbar(
+    #         ["About"],
+    #         "Home",
+    #         logo_path="Images/logo-cascadia.svg",
+    #         logo_page="Home",
+    #         urls={"About": "https://github.com/Arcerite/CAM_CODING_PROFILER"},
+    #         styles=get_navbar_styles(),
+    #         options=get_navbar_options(),  # type: ignore
+    #         adjust=False,
+    #     )
+
+    st_navbar(
+        ["About"],
+        "Home",
+        logo_path="Images/logo-cascadia.svg",
+        logo_page="Home",
+        urls={"About": "https://github.com/Arcerite/CAM_CODING_PROFILER"},
+        styles=get_navbar_styles(),
+        options=get_navbar_options(),  # type: ignore
+        adjust=False,
+    )
 
     load_dotenv()
     _initialize_session_state()
