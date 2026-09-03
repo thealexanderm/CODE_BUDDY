@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-# import os
 from typing import Any, Dict, Optional
 
 import streamlit as st
@@ -10,18 +9,11 @@ from streamlit_navigation_bar import st_navbar
 from analyzer import analyze_and_process_code
 from utils import MAX_CODE_LENGTH, get_navbar_options, get_navbar_styles
 
-# IS_TEST = os.getenv("STREAMLIT_TESTING") == "1"
-
 
 def _set_page_config() -> None:
-    # if IS_TEST:
-    #     icon = None
-    # else:
-    #     icon = "Images/smile_icon.png"
-    icon = "Images/smile_icon.png"
     st.set_page_config(
         page_title="Code Buddy",
-        page_icon=icon,
+        page_icon="Images/smile_icon.png",
         layout="wide",
         initial_sidebar_state="collapsed",
     )
@@ -82,12 +74,12 @@ def _render_flaws_section(analysis: Optional[Dict[str, Any]]) -> None:
     with st.expander("**Identified Flaws**", expanded=False):
         if analysis is None:
             st.write("Please run the code analysis to find flaws.")
-        else:  # otherwise show the flaws
+        else:
             flaws = analysis.get("flaws", [])
-            if flaws:  # if there are any flaws display each of them
+            if flaws:
                 for flaw in flaws:
                     st.write(f"- {flaw}")
-            else:  # if there are no flaws, and flaws is not none... then say no flaws detected
+            else:
                 st.success("No major flaws detected.")
 
 
@@ -133,9 +125,7 @@ def _render_download_buttons(
     readme_content: Optional[str],
     extension: str = ".py",
 ) -> None:
-    if (readme_content is not None) and (
-        refactored_code is not None
-    ):  # if both the readme and the refactored code exsists
+    if (readme_content is not None) and (refactored_code is not None):
         st.markdown("---")
         d_col1, d_col2 = st.columns(2)
         with d_col1:
@@ -183,7 +173,7 @@ def analyze(user_input: str) -> None:
 
     try:
         with st.spinner("Analyzing, refactoring, and documenting code..."):
-            combined_results = analyze_and_process_code(user_input)  # run the analyzer
+            combined_results = analyze_and_process_code(user_input)
 
             if not combined_results.get("is_valid_code", True):
                 st.session_state.analysis_results = {
@@ -206,17 +196,6 @@ def analyze(user_input: str) -> None:
 def main() -> None:
     _set_page_config()
     _hide_streamlit_buttons()
-    # if not IS_TEST:
-    #     st_navbar(
-    #         ["About"],
-    #         "Home",
-    #         logo_path="Images/logo-cascadia.svg",
-    #         logo_page="Home",
-    #         urls={"About": "https://github.com/Arcerite/CAM_CODING_PROFILER"},
-    #         styles=get_navbar_styles(),
-    #         options=get_navbar_options(),  # type: ignore
-    #         adjust=False,
-    #     )
 
     st_navbar(
         ["About"],

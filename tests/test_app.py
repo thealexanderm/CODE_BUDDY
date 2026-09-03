@@ -1,4 +1,3 @@
-# import os
 import pathlib
 import runpy
 from unittest.mock import MagicMock, patch
@@ -8,7 +7,6 @@ from streamlit.testing.v1 import AppTest
 import app
 
 APP_PATH = pathlib.Path(__file__).parent.parent / "app.py"
-# os.environ["STREAMLIT_TESTING"] = "1"
 
 
 def test_app_renders_properly():
