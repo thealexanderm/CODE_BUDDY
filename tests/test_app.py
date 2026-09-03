@@ -1,4 +1,5 @@
 import os
+import pathlib
 import runpy
 from unittest.mock import MagicMock, patch
 
@@ -6,11 +7,12 @@ from streamlit.testing.v1 import AppTest
 
 import app
 
+APP_PATH = pathlib.Path(__file__).parent.parent / "app.py"
 os.environ["STREAMLIT_TESTING"] = "1"
 
 
 def test_app_renders_properly():
-    at = AppTest.from_file("app.py").run()
+    at = AppTest.from_file("APP_PATH").run()
     assert not at.exception
     assert at.subheader[0].value == "Source Code"
 
@@ -30,7 +32,7 @@ def test_invalid_syntax_error_handling():
             "suggestions": [],
         }
 
-        at = AppTest.from_file("app.py").run()
+        at = AppTest.from_file("APP_PATH").run()
         at.text_area[0].input("def broken_function(").run()
         at.button[0].click().run()
 
@@ -43,7 +45,7 @@ def test_analyze_exception_handling():
     with patch("analyzer.analyze_and_process_code") as mock_analyze:
         mock_analyze.side_effect = RuntimeError("Groq API Timeout or Connection Error")
 
-        at = AppTest.from_file("app.py").run()
+        at = AppTest.from_file("APP_PATH").run()
         at.text_area[0].input("print('Hello World')").run()
         at.button[0].click().run()
 
@@ -51,7 +53,7 @@ def test_analyze_exception_handling():
 
 
 def test_empty_input_guardrail():
-    at = AppTest.from_file("app.py").run()
+    at = AppTest.from_file("APP_PATH").run()
     at.text_area[0].input("    ").run()
     at.button[0].click().run()
 
@@ -71,7 +73,7 @@ def test_ui_renders_flaws_and_suggestions():
             "readme_content": "# Done",
         }
 
-        at = AppTest.from_file("app.py").run()
+        at = AppTest.from_file("APP_PATH").run()
         at.text_area[0].input("print('100% coverage')").run()
         at.button[0].click().run()
         assert not at.exception
@@ -90,7 +92,7 @@ def test_ui_renders_empty_flaws_and_suggestions():
             "readme_content": "# Done Empty",
         }
 
-        at = AppTest.from_file("app.py").run()
+        at = AppTest.from_file("APP_PATH").run()
         at.text_area[0].input("pass").run()
         at.button[0].click().run()
         assert not at.exception
