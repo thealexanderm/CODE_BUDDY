@@ -1,9 +1,12 @@
+import os
 import runpy
 from unittest.mock import MagicMock, patch
 
 from streamlit.testing.v1 import AppTest
 
 import app
+
+os.environ["STREAMLIT_TESTING"] = "1"
 
 
 def test_app_renders_properly():
