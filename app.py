@@ -10,6 +10,47 @@ from analyzer import analyze_and_process_code
 from utils import MAX_CODE_LENGTH, get_navbar_options, get_navbar_styles
 
 
+def _get_language_and_extension(analysis: Optional[Dict[str, Any]]) -> tuple[str, str]:
+    if not analysis:
+        return "python", ".py"
+    return analysis.get("language", "python"), analysis.get("extension", ".py")
+
+
+def _build_error_results(combined_results: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        "analysis": combined_results,
+        "refactored_code": "Error: Input does not appear to be valid source code. Refactoring aborted.",  # noqa: E501
+        "readme_content": "Error: Cannot generate documentation for invalid source code.",  # noqa: E501
+    }
+
+
+def _build_success_results(combined_results: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        "analysis": combined_results,
+        "refactored_code": combined_results.get("refactored_code", ""),
+        "readme_content": combined_results.get("readme_content", ""),
+    }
+
+
+def analyze(user_input: str) -> None:
+    if not user_input.strip():
+        st.warning("Please provide valid code input before running diagnostics.")
+        return
+
+    try:
+        with st.spinner("Analyzing, refactoring, and documenting code..."):
+            combined_results = analyze_and_process_code(user_input)
+            is_valid = combined_results.get("is_valid_code", True)
+            st.session_state.analysis_results = (
+                _build_success_results(combined_results)
+                if is_valid
+                else _build_error_results(combined_results)
+            )
+
+    except Exception as error:
+        st.error(f"Analysis failed:\n{error}")
+
+
 def _set_page_config() -> None:
     st.set_page_config(
         page_title="Code Buddy",
@@ -151,46 +192,13 @@ def render_analysis_ui(
     refactored_code: Optional[str] = None,
     readme_content: Optional[str] = None,
 ) -> None:
-    if analysis:
-        language = analysis.get("language", "python")
-        extension = analysis.get("extension", ".py")
-    else:
-        language = "python"
-        extension = ".py"
-
+    language, extension = _get_language_and_extension(analysis)
     _render_complexity_section(analysis)
     _render_flaws_section(analysis)
     _render_suggestions_section(analysis)
     _render_refactored_code_section(refactored_code, language=language)
     _render_readme_section(readme_content)
     _render_download_buttons(refactored_code, readme_content, extension=extension)
-
-
-def analyze(user_input: str) -> None:
-    if not user_input.strip():
-        st.warning("Please provide valid code input before running diagnostics.")
-        return
-
-    try:
-        with st.spinner("Analyzing, refactoring, and documenting code..."):
-            combined_results = analyze_and_process_code(user_input)
-
-            if not combined_results.get("is_valid_code", True):
-                st.session_state.analysis_results = {
-                    "analysis": combined_results,
-                    "refactored_code": "Error: Input does not appear to be valid source code. Refactoring aborted.",  # noqa: E501
-                    "readme_content": "Error: Cannot generate documentation for invalid source code.",  # noqa: E501
-                }
-                return
-            # set the state of the analysis so that it doesnt reset on button press
-            st.session_state.analysis_results = {
-                "analysis": combined_results,
-                "refactored_code": combined_results.get("refactored_code", ""),
-                "readme_content": combined_results.get("readme_content", ""),
-            }
-
-    except Exception as error:
-        st.error(f"Analysis failed:\n{error}")
 
 
 def _render_input_panel() -> str:
