@@ -111,17 +111,22 @@ def _render_complexity_section(analysis: Optional[Dict[str, Any]]) -> None:
             )
 
 
+def _render_bulleted_list_or_success(items: list[str], empty_message: str) -> None:
+    if items:
+        for item in items:
+            st.write(f"- {item}")
+    else:
+        st.success(empty_message)
+
+
 def _render_flaws_section(analysis: Optional[Dict[str, Any]]) -> None:
     with st.expander("**Identified Flaws**", expanded=False):
         if analysis is None:
             st.write("Please run the code analysis to find flaws.")
         else:
-            flaws = analysis.get("flaws", [])
-            if flaws:
-                for flaw in flaws:
-                    st.write(f"- {flaw}")
-            else:
-                st.success("No major flaws detected.")
+            _render_bulleted_list_or_success(
+                analysis.get("flaws", []), "No major flaws detected."
+            )
 
 
 def _render_suggestions_section(analysis: Optional[Dict[str, Any]]) -> None:
@@ -129,12 +134,9 @@ def _render_suggestions_section(analysis: Optional[Dict[str, Any]]) -> None:
         if analysis is None:
             st.write("Please run the code analysis to find suggestions.")
         else:
-            suggestions = analysis.get("suggestions", [])
-            if suggestions:
-                for suggestion in suggestions:
-                    st.write(f"- {suggestion}")
-            else:
-                st.success("No suggestions generated.")
+            _render_bulleted_list_or_success(
+                analysis.get("suggestions", []), "No suggestions generated."
+            )
 
 
 def _render_refactored_code_section(
