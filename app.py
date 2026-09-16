@@ -193,10 +193,50 @@ def analyze(user_input: str) -> None:
         st.error(f"Analysis failed:\n{error}")
 
 
-def main() -> None:
-    _set_page_config()
-    _hide_streamlit_buttons()
+def _render_input_panel() -> str:
+    st.subheader("Source Code")
+    user_input = st.text_area(
+        "Source Code",
+        max_chars=MAX_CODE_LENGTH,
+        height=600,
+        placeholder="Paste code here...",
+        label_visibility="collapsed",
+    )
 
+    if st.button(
+        "Analyze & Refactor",
+        type="primary",
+        use_container_width=True,
+    ):
+        analyze(user_input)
+    return user_input
+
+
+def _render_results_panel() -> None:
+    st.markdown(
+        "<h3 style='text-align: center;'> Results</h3>",
+        unsafe_allow_html=True,
+    )
+    results = st.session_state.analysis_results
+    if results is not None:
+        render_analysis_ui(
+            analysis=results["analysis"],
+            refactored_code=results["refactored_code"],
+            readme_content=results["readme_content"],
+        )
+    else:
+        render_analysis_ui(None, None, None)
+
+
+def _render_main_layout() -> None:
+    col1, col2 = st.columns(2)
+    with col1:
+        _render_input_panel()
+    with col2:
+        _render_results_panel()
+
+
+def _render_navbar() -> None:
     st_navbar(
         ["About"],
         "Home",
@@ -208,42 +248,14 @@ def main() -> None:
         adjust=False,
     )
 
+
+def main() -> None:
+    _set_page_config()
+    _hide_streamlit_buttons()
+    _render_navbar()
     load_dotenv()
     _initialize_session_state()
-
-    col1, col2 = st.columns(2)
-    with col1:
-        st.subheader("Source Code")
-        user_input = st.text_area(
-            "Source Code",
-            max_chars=MAX_CODE_LENGTH,
-            height=600,
-            placeholder="Paste code here...",
-            label_visibility="collapsed",
-        )
-
-        analyze_button = st.button(
-            "Analyze & Refactor",
-            type="primary",
-            use_container_width=True,
-        )
-    with col2:
-        st.markdown(
-            "<h3 style='text-align: center;'> Results</h3>",
-            unsafe_allow_html=True,
-        )
-        if analyze_button:
-            analyze(user_input)
-
-        if st.session_state.analysis_results is not None:
-            results = st.session_state.analysis_results
-            render_analysis_ui(
-                analysis=results["analysis"],
-                refactored_code=results["refactored_code"],
-                readme_content=results["readme_content"],
-            )
-        else:
-            render_analysis_ui(None, None, None)
+    _render_main_layout()
 
 
 if __name__ == "__main__":
