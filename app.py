@@ -32,6 +32,14 @@ def _build_success_results(combined_results: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+def _build_pipeline_failure_results(combined_results: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        "analysis": combined_results,
+        "refactored_code": "Error: Process pipeline failure. Refactoring aborted.",  # noqa: E501
+        "readme_content": "Error: Process pipeline failure. Please try again.",  # noqa: E501
+    }
+
+
 def analyze(user_input: str) -> None:
     if not user_input.strip():
         st.warning("Please provide valid code input before running diagnostics.")
@@ -40,12 +48,19 @@ def analyze(user_input: str) -> None:
     try:
         with st.spinner("Analyzing, refactoring, and documenting code..."):
             combined_results = analyze_and_process_code(user_input)
-            is_valid = combined_results.get("is_valid_code", True)
-            st.session_state.analysis_results = (
-                _build_success_results(combined_results)
-                if is_valid
-                else _build_error_results(combined_results)
-            )
+            is_valid = combined_results.get("is_valid_code")
+            if is_valid is True:
+                st.session_state.analysis_results = _build_success_results(
+                    combined_results
+                )
+            elif is_valid is False:
+                st.session_state.analysis_results = _build_error_results(
+                    combined_results
+                )
+            else:
+                st.session_state.analysis_results = _build_pipeline_failure_results(
+                    combined_results
+                )
 
     except Exception as error:
         st.error(f"Analysis failed:\n{error}")

@@ -22,12 +22,10 @@ def create_client() -> Groq:
     api_key = None
 
     try:
-        if (
-            "GROQ_API_KEY" in st.secrets
-        ):  # if it is on the website the api would be under st.secrets
+        if "GROQ_API_KEY" in st.secrets:
             api_key = st.secrets["GROQ_API_KEY"]
-    except Exception:
-        pass
+    except Exception as error:
+        print(f"Could not read Streamlit secrets: {error}")
 
     if not api_key:
         load_dotenv()
@@ -130,7 +128,7 @@ Return EXACTLY this JSON schema structure:
             print(f"Unified request attempt {attempt + 1} failed: {error}")
 
     return {
-        "is_valid_code": False,
+        "is_valid_code": None,
         "language": "python",
         "extension": ".py",
         "big_o": {
