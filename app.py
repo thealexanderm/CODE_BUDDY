@@ -22,24 +22,24 @@ def _set_page_config() -> None:
 def _hide_streamlit_buttons() -> None:
     st.markdown(
         """
+    <style>
     .stAppDeployButton {
         display: none;
     }
-    <style>
     .block-container {
         padding-top: 1rem;
         padding-bottom: 1rem;
         padding-left: 1rem;
         padding-right: 1rem;
-    },
+    }
     [data-testid="st-navbar"] > div {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    max-width: 100% !important;
-    padding-left: 2rem;
-    padding-right: 2rem;
-    },
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        max-width: 100% !important;
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
     [data-testid="st-navbar"] > div > div {
         flex: 0 1 auto !important;
     }
