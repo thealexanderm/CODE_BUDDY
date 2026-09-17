@@ -10,7 +10,9 @@ from analyzer import analyze_and_process_code
 from utils import MAX_CODE_LENGTH, get_navbar_options, get_navbar_styles
 
 
-def _get_language_and_extension(analysis: Optional[Dict[str, Any]]) -> tuple[str, str]:
+def _get_language_and_extension(
+    analysis: Optional[Dict[str, Any]],
+) -> tuple[str, str]:
     if not analysis:
         return "python", ".py"
     return analysis.get("language", "python"), analysis.get("extension", ".py")
@@ -32,7 +34,9 @@ def _build_success_results(combined_results: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def _build_pipeline_failure_results(combined_results: Dict[str, Any]) -> Dict[str, Any]:
+def _build_pipeline_failure_results(
+    combined_results: Dict[str, Any],
+) -> Dict[str, Any]:
     return {
         "analysis": combined_results,
         "refactored_code": "Error: Process pipeline failure. Refactoring aborted.",  # noqa: E501
