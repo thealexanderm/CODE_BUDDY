@@ -39,8 +39,8 @@ Large Language Models have changed the way that software is developed, but tryin
 ### 3.1 Class Diagram
 
 <p align="center">
-    <img src="UML/class_diagram.png" alt="Use Case Diagram" />
-    Figure 1: Class Diagram (Outdated)
+    <img src="UML/module_dependency_diagram.png" alt="Use Case Diagram" />
+    Figure 1: Module Dependency Diagram
 </p>
 
 ### 3.2 Use Case Diagram
