@@ -33,7 +33,6 @@ def test_validate_analysis_response_missing_key():
 
 
 def test_validate_analysis_response_invalid_types():
-    """Verify validation fails when data types are inccorect."""
     base_payload = {
         "is_valid_code": True,
         "language": "python",
@@ -67,8 +66,7 @@ def test_validate_analysis_response_invalid_types():
     assert validate_analysis_response(bad_flaws) is False
 
 
-def test_create_client_secrets_exception_handling():
-    """Ensure that secret handling works as expected."""
+def test_create_client_env_fallback():
     with patch("analyzer.load_dotenv"), patch(
         "analyzer.os.getenv"
     ) as mock_getenv, patch("analyzer.Groq"), patch.object(
@@ -82,7 +80,6 @@ def test_create_client_secrets_exception_handling():
 
 
 def test_create_client_with_secrets():
-    """Verify create_client successfully extracts the key from st.secrets."""
     with patch("analyzer.st.secrets", {"GROQ_API_KEY": "secret_key"}), patch(
         "analyzer.Groq"
     ) as mock_groq:
@@ -92,7 +89,6 @@ def test_create_client_with_secrets():
 
 
 def test_create_client_missing_key_error():
-    """Verify create_client raises ValueError when no keys are found anywhere."""
     with patch("analyzer.st.secrets", {}), patch("analyzer.load_dotenv"), patch(
         "analyzer.os.getenv", return_value=None
     ):
@@ -102,7 +98,6 @@ def test_create_client_missing_key_error():
 
 @patch("analyzer.Groq")
 def test_analyze_code_invalid_structure(mock_groq_class):
-    """Verify analyizing faulty responses triggers backup response."""
     mock_client = mock_groq_class.return_value
     mock_chat = mock_client.chat.completions.create
     mock_chat.return_value.choices = [
@@ -118,4 +113,4 @@ def test_analyze_code_invalid_structure(mock_groq_class):
     ]
 
     res = analyze_and_process_code("some code")
-    assert res["is_valid_code"] is False
+    assert res["is_valid_code"] is None

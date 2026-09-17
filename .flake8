@@ -5,5 +5,5 @@ max-line-length = 88
 # Tell Flake8 to completely ignore these specific rules:
 # E203: whitespace before ':' (Black formats this automatically)
 # W503: line break before binary operator (Black formats this automatically)
-# E501: Line too long (Turning this off entirely kills the E501 errors)
-extend-ignore = E203, W503, E501
+extend-ignore = E203, W503
+exclude = .git,__pycache__,venv,.mypy_cache

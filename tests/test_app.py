@@ -16,7 +16,7 @@ def test_app_renders_properly():
 
 
 def test_invalid_syntax_error_handling():
-    with patch("app.analyze") as mock_analyze:
+    with patch("analyzer.analyze_and_process_code") as mock_analyze:
         mock_analyze.return_value = {
             "is_valid_code": False,
             "language": "python",
