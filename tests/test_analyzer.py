@@ -1,4 +1,5 @@
-from unittest.mock import patch
+import json
+from unittest.mock import MagicMock, patch
 
 import pytest
 import streamlit as st
@@ -118,3 +119,44 @@ def test_analyze_code_returns_failure_for_malformed_json():
         res = analyze_and_process_code("some code")
         assert res["is_valid_code"] is None
         assert "Process pipeline failure" in res["refactored_code"]
+
+
+def test_analyze_code_returns_valid_response():
+    valid_response = {
+        "is_valid_code": True,
+        "language": "python",
+        "extension": ".py",
+        "big_o": {
+            "time": "O(n)",
+            "space": "O(1)",
+            "explanation": "Simple loop.",
+        },
+        "flaws": [],
+        "suggestions": [],
+        "refactored_code": "pass",
+        "readme_content": "# Readme",
+    }
+
+    fake_response = MagicMock()
+    fake_response.choices[0].message.content = json.dumps(valid_response)
+
+    with patch("analyzer.Groq") as mock_groq:
+        mock_groq.return_value.chat.completions.create.return_value = fake_response
+
+        result = analyze_and_process_code("some code")
+
+    assert result == valid_response
+
+
+def test_analyze_code_retries_when_response_content_is_none():
+    fake_response = MagicMock()
+    fake_response.choices[0].message.content = None
+
+    with patch("analyzer.Groq") as mock_groq_class:
+        mock_chat = mock_groq_class.return_value.chat.completions.create
+        mock_chat.return_value = fake_response
+
+        result = analyze_and_process_code("some code")
+
+    assert result["is_valid_code"] is None
+    assert mock_chat.call_count == 3

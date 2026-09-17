@@ -56,6 +56,33 @@ def test_analysis_exception_displays_error():
         assert "Groq API Timeout or Connection Error" in at.error[0].value
 
 
+def test_pipeline_failure_displays_aborted_refactoring():
+    with patch("analyzer.analyze_and_process_code") as mock_analyze:
+        mock_analyze.return_value = {
+            "is_valid_code": None,
+            "language": "python",
+            "extension": ".py",
+            "big_o": {
+                "time": "Unknown",
+                "space": "Unknown",
+                "explanation": "Analysis pipeline failure.",
+            },
+            "flaws": ["Failed to parse valid analytical data from the engine."],
+            "suggestions": [],
+            "refactored_code": "Error: Process pipeline failure.",
+            "readme_content": "Error: Failed to construct document metrics.",
+        }
+
+        at = AppTest.from_file(APP_PATH).run()
+        at.text_area[0].input("print('Hello World')").run()
+        at.button[0].click().run()
+
+        results = at.session_state["analysis_results"]
+
+    assert results["analysis"]["is_valid_code"] is None
+    assert "Process pipeline failure" in results["refactored_code"]
+
+
 def test_empty_input_guardrail():
     at = AppTest.from_file(APP_PATH).run()
     at.text_area[0].input("    ").run()
