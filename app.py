@@ -83,6 +83,9 @@ def _hide_streamlit_buttons() -> None:
     st.markdown(
         """
     <style>
+    header[data-testid="stHeader"] {
+    display: none;
+    }
     .stAppDeployButton {
         display: none;
     }
