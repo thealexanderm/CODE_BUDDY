@@ -46,28 +46,23 @@ def test_validate_analysis_response_invalid_types():
         "readme_content": "# Readme",
     }
 
-    # Test invalid type for is_valid_code (Triggers Line 75)
     bad_bool_payload = base_payload.copy()
     bad_bool_payload["is_valid_code"] = "not a boolean string"
     assert validate_analysis_response(bad_bool_payload) is False
 
-    # Systematically corrupt every individual text field
     for key in ["language", "extension", "refactored_code", "readme_content"]:
         bad_payload = base_payload.copy()
         bad_payload[key] = 123
         assert validate_analysis_response(bad_payload) is False
 
-    # Test invalid type for big_o
     bad_big_o = base_payload.copy()
     bad_big_o["big_o"] = "Not a dict"
     assert validate_analysis_response(bad_big_o) is False
 
-    # Test invalid type for flaws
     bad_flaws = base_payload.copy()
     bad_flaws["flaws"] = "Not a list"
     assert validate_analysis_response(bad_flaws) is False
 
-    # Test invalid type for suggestions
     bad_suggestions = base_payload.copy()
     bad_suggestions["suggestions"] = "Not a list"
     assert validate_analysis_response(bad_suggestions) is False
