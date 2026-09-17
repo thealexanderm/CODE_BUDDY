@@ -16,19 +16,25 @@ This fork highlights my individual work on the original team project, including:
 - Contributed an upstream fix to the `streamlit-navigation-bar` library
 - Expanded and corrected the test suite (fixed a stale assertion left over from an architecture change)
 
+## Project Highlights
+
+- AI-powered source-code analysis using Groq
+- Big O complexity analysis, flaw detection, and refactoring suggestions
+- Generated refactored code and README documentation
+- Downloadable output files
+- Handling for invalid input, API failures, and malformed responses
+
 ## 1. Abstract
 
-Software development takes time and effort to do well, but **Code Buddy** aims to ease the task for developers of all skill-levels. **Code Buddy** is a website designed to help programmers create better code. Users simply upload their code and the code will be analyzed by AI to offer suggestions including Big O analysis, identified flaws, comments, and coding conventions. Then, the user will be able to download the refactored code and the provided README. **Code Buddy** will not only save time, but it will also save developers from headaches by identifying flaws and possible bottlenecks before they arise.
+Software development takes time and effort to do well, but **Code Buddy** aims to ease the task for developers of all skill-levels. **Code Buddy** is a website designed to help programmers create better code. Users simply paste their code and the code will be analyzed by Groq to offer suggestions including Big O analysis, identified flaws, comments, and coding conventions. Then, the user can download the refactored code and the provided README. **Code Buddy** will not only save time, but it will also save developers from headaches by identifying flaws and possible bottlenecks before they arise.
 
 ## 2. Introduction
 
 Large Language Models have changed the way that software is developed, but trying to "vibe code" can easily turn into fighting with the model rather than creating quality software. Even if you code something functional with an LLM, it may be riddled with bugs and security risks. **Code Buddy** aims to use AI to build code faster and better without the headaches.
 
-**Code Buddy** is an intelligent source code analysis website built with Streamlit and powered by Groq's Compound. Groq's Compound system integrates OpenAI's GPT-OSS 120B and Llama 4 models. Once the user uploads their code, Groq will analyze it for time and space complexity, performance bottlenecks, security concerns, and style convention violations. Our website will return the report with detailed explanations, a README file, and a new version of the code with corrected errors and improved readability. The user will be able to export the refactored code and documentation instantly.
-
 ## 3. Architectural Design
 
-The **Code Buddy** website is built entirely with Python. The frontend uses the Streamlit library. The backend implements the LLM prompts, API integration with GroqCloud, and JSON response validation. The website takes in the user's pasted code to give to the Groq's Compound model to analyze. The Groq's Compound model returns a detailed report with explanations, a README file, and a new version of the code with corrected errors and improved readability. The user will be able to export the refactored code and documentation instantly.
+**Code Buddy** is an intelligent source code analysis website built with Streamlit and powered by Groq's Compound. Groq's Compound system integrates OpenAI's GPT-OSS 120B and Llama 4 models. Once the user pastes their code, Groq will analyze it for time and space complexity, performance bottlenecks, security concerns, and style convention violations. Our website will return the report with detailed explanations, a README file, and a new version of the code with corrected errors and improved readability. The user will be able to export the refactored code and documentation instantly.
 
 ### 3.1 Class Diagram
 
@@ -53,7 +59,48 @@ The **Code Buddy** website is built entirely with Python. The frontend uses the 
 
 ## 4. User Guide/Implementation
 
-Users can access the application from any device with a web browser and internet connection. However, the application is designed for a desktop environment, so it is recommended to use "desktop mode" if using a mobile browser. If the application has not been accessed recently, it will need to "wake up"; this is normal and should only take around 15 seconds. The application can be accessed at the site: [code-buddy-mulderfork.streamlit.app](https://code-buddy-mulderfork.streamlit.app/).
+### Local Setup
+
+```bash
+git clone "https://github.com/thealexanderm/CODE_BUDDY.git"
+cd CODE_BUDDY
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+### API Configuration
+
+Copy the example environment file:
+
+```bash
+cp .env.example .env
+```
+
+Then edit `.env` and add your Groq API key:
+
+```text
+GROQ_API_KEY=your_api_key_here
+```
+
+Never commit `.env` or expose your API key publicly.
+
+### Running the Application
+
+```bash
+streamlit run app.py
+```
+
+### Running Tests
+
+```bash
+pytest
+pytest --cov=. --cov-report=term-missing
+```
+
+The current test suite passes with 100% coverage for `analyzer.py`, `app.py`, and `utils.py`.
+
+Users can also access the application from any device with a web browser and internet connection. However, the application is designed for a desktop environment, so it is recommended to use "desktop mode" if using a mobile browser. If the application has not been accessed recently, it will need to "wake up"; this is normal and should only take around 15 seconds. The application can be accessed at the site: [code-buddy-mulderfork.streamlit.app](https://code-buddy-mulderfork.streamlit.app/).
 
 <p align="center">
     <img src="Images/sleeping.png" alt="Sleeping site" />
@@ -65,7 +112,7 @@ Users can access the application from any device with a web browser and internet
     Figure 5: Code Buddy Site
 </p>
 
-Users can then paste their code into the input box and click "Analyze & Refactor". This will run the code analysis. Once the code analysis has run, users can open the expander boxes to read the complexity, identified flaws, suggestions, and generated README. Users may also scroll down to find the buttons to download the README as an Markdown file and the refactored code as a file corresponding to the uploaded language.
+Users can then paste their code into the input box and click "Analyze & Refactor". This will run the code analysis. Once the code analysis has run, users can open the expander boxes to read the complexity, identified flaws, suggestions, and generated README. Users may also scroll down to find the buttons to download the README as a Markdown file and the refactored code as a file corresponding to the pasted language.
 
 <p align="center">
     <img src="Images/user_input1.png" alt="Site with user input" />
@@ -93,7 +140,7 @@ Due to time constraints, we were not able to implement all the features that we 
 
 ## 7. Conclusion
 
-**Code Buddy** has achieved the goal of providing AI powered code profiling. By allowing users to input their code for feedback and refactoring, software development is made easier and more efficient than before. We believe this site is a great tool to aid developers of all backgrounds and skill levels.
+**Code Buddy** has achieved the goal of providing AI-powered code profiling. By allowing users to input their code for feedback and refactoring, software development is made easier and more efficient than before. We believe this site is a great tool to aid developers of all backgrounds and skill levels.
 
 ## 8. Demo
 

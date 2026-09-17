@@ -5,6 +5,7 @@ flake8
 mypy
 pytest
 pytest-cov
+pytest-cov
 streamlit-navigation-bar
 pre-commit
 black
