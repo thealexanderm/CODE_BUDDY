@@ -1,8 +1,19 @@
+> This is my personal fork of a team project (CIS 350, Grand Valley State University), maintained to showcase individual contributions including upstream bug fixes, refactoring, and testing improvements. See [My Contributions](#my-contributions) below for details.
+
 # Code Buddy ☺ - AI-Powered Code Profiler
 
 <p>Authors: Caleb Peters, Matt Simone, Alex Mulder<br>
 Institution: Grand Valley State University<br>
 Course: CIS 350</p>
+
+## My Contributions
+
+This fork highlights my individual work on the original team project, including:
+- Frontend architecture and Streamlit UI state management (`app.py`)
+- Refactored the entry point using Sean Parent's "no raw loops, no raw logic" principle
+- Identified and fixed a state-handling bug where pipeline failures were misreported as invalid user input
+- Contributed an upstream fix to the `streamlit-navigation-bar` library ([PR link])
+- Expanded and corrected the test suite (fixed a stale assertion left over from an architecture change)
 
 ## 1. Abstract
 
@@ -67,7 +78,7 @@ Users can then paste their code into the input box and click "Analyze & Refactor
 
 ## 5. Risk Analysis and Retrospective
 
-Issues in the beginning of the project were prompt injections and hallucinations. These risked returning broken code to the user. In order to solve this issue, we used the LLM to re-analyze the analysis while being wary of managing our API rate limits.
+Issues in the beginning of the project were prompt injections and hallucinations. These risked returning broken code to the user. In order to solve this issue, we used the LLM to re-validate the analysis while being wary of managing our API rate limits.
 
 Later in the development, we struggled with our continuous integration automation. Almost all of our code was prevented from being deployed due to linting issues. We dealt with this by making sure we used the same version of linting as the CI so that we could see the issues before we push the code.
 
