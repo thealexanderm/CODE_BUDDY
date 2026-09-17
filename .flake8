@@ -6,3 +6,4 @@ max-line-length = 88
 # E203: whitespace before ':' (Black formats this automatically)
 # W503: line break before binary operator (Black formats this automatically)
 extend-ignore = E203, W503
+exclude = .git,__pycache__,venv,.mypy_cache
