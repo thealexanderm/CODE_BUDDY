@@ -1,5 +1,6 @@
 import json
 import os
+import time
 from typing import Any, Dict
 
 import streamlit as st
@@ -126,6 +127,9 @@ Return EXACTLY this JSON schema structure:
                 return data
         except Exception as error:
             print(f"Unified request attempt {attempt + 1} failed: {error}")
+
+        if attempt < MAX_RETRIES - 1:
+            time.sleep(2**attempt)
 
     return {
         "is_valid_code": None,
