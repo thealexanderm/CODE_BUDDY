@@ -36,7 +36,7 @@ Large Language Models have changed the way that software is developed, but tryin
 
 **Code Buddy** is an intelligent source code analysis website built with Streamlit and powered by Groq's OpenAI GPT-OSS 120B model. Once the user pastes their code, Groq will analyze it for time and space complexity, performance bottlenecks, security concerns, and style convention violations. Our website will return the report with detailed explanations, a README file, and a new version of the code with corrected errors and improved readability. The user will be able to export the refactored code and documentation instantly.
 
-### 3.1 Class Diagram
+### 3.1 Module Dependency Diagram
 
 <p align="center">
     <img src="UML/module_dependency_diagram.png" alt="Use Case Diagram" />
