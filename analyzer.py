@@ -120,7 +120,13 @@ Return EXACTLY this JSON schema structure:
                     {"role": "user", "content": user_prompt},
                 ],
             )
-            content = response.choices[0].message.content.strip()  # type: ignore
+            content = response.choices[0].message.content
+
+            if content is None:
+                print(f"Attempt {attempt + 1} returned empty content, retrying...")
+                continue
+
+            content = content.strip()
             data = json.loads(content)
 
             if validate_analysis_response(data):
