@@ -9,6 +9,7 @@ Course: CIS 350</p>
 ## My Contributions
 
 This fork highlights my individual work on the original team project, including:
+
 - Frontend architecture and Streamlit UI state management (`app.py`)
 - Refactored the entry point using Sean Parent's "no raw loops, no raw logic" principle
 - Identified and fixed a state-handling bug where pipeline failures were misreported as invalid user input
