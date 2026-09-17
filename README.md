@@ -13,7 +13,7 @@ This fork highlights my individual work on the original team project, including:
 - Frontend architecture and Streamlit UI state management (`app.py`)
 - Refactored the entry point using Sean Parent's "no raw loops, no raw logic" principle
 - Identified and fixed a state-handling bug where pipeline failures were misreported as invalid user input
-- Contributed an upstream fix to the `streamlit-navigation-bar` library ([PR link])
+- Contributed an upstream fix to the `streamlit-navigation-bar` library
 - Expanded and corrected the test suite (fixed a stale assertion left over from an architecture change)
 
 ## 1. Abstract
