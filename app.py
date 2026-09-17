@@ -271,7 +271,7 @@ def _render_navbar() -> None:
         "Home",
         logo_path="Images/logo-cascadia.svg",
         logo_page="Home",
-        urls={"About": "https://github.com/thealexandermulder/CODE_BUDDY"},
+        urls={"About": "https://github.com/thealexanderm/CODE_BUDDY"},
         styles=get_navbar_styles(),
         options=get_navbar_options(),  # pyright: ignore[reportArgumentType]
         adjust=False,
